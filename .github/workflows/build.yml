@@ -1,0 +1,62 @@
+name: compilar-radar_dj
+
+# Se activa automáticamente cada vez que subes/actualizas archivos en GitHub.
+# También se puede lanzar a mano desde la pestaña "Actions".
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  compilar-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Preparar Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias del frontend
+        run: npm install
+
+      - name: Instalar dependencias del motor de audio
+        working-directory: python-engine
+        run: pip install -r requirements.txt
+
+      - name: Empaquetar el motor de audio como ejecutable
+        working-directory: python-engine
+        run: pyinstaller --onefile --name radar_dj-engine main.py
+
+      - name: Colocar el motor donde Tauri lo espera
+        run: |
+          $ErrorActionPreference = "Stop"
+          New-Item -ItemType Directory -Force -Path src-tauri\binaries | Out-Null
+          Copy-Item -Force python-engine\dist\radar_dj-engine.exe src-tauri\binaries\radar_dj-engine-x86_64-pc-windows-msvc.exe
+          Get-ChildItem src-tauri\binaries
+
+      - name: Compilar la aplicación
+        run: npm run tauri build -- --no-bundle
+
+      - name: Armar la carpeta portable
+        run: |
+          $ErrorActionPreference = "Stop"
+          New-Item -ItemType Directory -Force -Path radar_dj-portable | Out-Null
+          Copy-Item -Force src-tauri\target\release\radar_dj.exe radar_dj-portable\
+          Copy-Item -Force src-tauri\binaries\radar_dj-engine-x86_64-pc-windows-msvc.exe radar_dj-portable\
+
+      - name: Subir el programa listo para descargar
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar_dj-portable
+          path: radar_dj-portable/
