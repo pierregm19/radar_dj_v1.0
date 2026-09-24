@@ -1,0 +1,33 @@
+{
+  "name": "radar_dj",
+  "version": "1.0.0",
+  "private": true,
+  "description": "App de escritorio para DJs: sugerencias de mezcla armonica via rueda Camelot, integracion con Rekordbox y biblioteca local.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@tauri-apps/api": "^2.5.0",
+    "@tauri-apps/plugin-dialog": "^2.2.0",
+    "@tauri-apps/plugin-fs": "^2.3.0",
+    "@tauri-apps/plugin-shell": "^2.2.0",
+    "@crabnebula/tauri-plugin-drag": "^2.0.0",
+    "lucide-react": "^0.383.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.5.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.1"
+  }
+}

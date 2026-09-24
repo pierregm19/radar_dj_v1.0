@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Evita que el usuario seleccione texto al arrastrar filas hacia Rekordbox */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  margin: 0;
+  background-color: #17171a;
+  color: #eaeaea;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+}
